@@ -16,11 +16,21 @@ public class Health : MonoBehaviour {
 	public int frameMarginLeft  = 10;
 	public int frameMarginTop = 10;
 	
+	public bool IsDead {
+		get {
+			return currentHealth <= 0;
+		}
+	}
+	
 	float currentHealth;
 	
 	// Use this for initialization
 	void Start () {
 		currentHealth = MaxHealth;
+	}
+	
+	void Reset () {
+		currentHealth = MaxHealth;	
 	}
 	
 	// Update is called once per frame
@@ -29,27 +39,26 @@ public class Health : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
-		float healthkill = 10;
+		float healthkill = 6;
 		if ( c != null ) {
-			Debug.Log ( transform.parent.rigidbody.velocity );
 			healthkill *= transform.parent.rigidbody.velocity.magnitude;
 		}
 		currentHealth -= healthkill;
-		Debug.Log(
-			string.Format( "Current Health Level is {0}", 
-			currentHealth ));
+		if ( currentHealth < 0 ) {
+			currentHealth = 0;
+		}
 	}
 	
 	void OnGUI () {
 		float truewidth = ((float)currentHealth / (float)MaxHealth) * healthWidth;
 		GUI.DrawTexture( 
-			new Rect(healthMarginLeft,healthMarginTop,
-			healthMarginLeft + (float)truewidth, healthHeight), 
+			new Rect(healthMarginLeft, healthMarginTop,
+			(float)truewidth, healthHeight), 
 			HealthTexture, ScaleMode.ScaleAndCrop, true, 0 );
 
     	GUI.DrawTexture( 
-			new Rect(frameMarginLeft,frameMarginTop, 
-			frameMarginLeft + frameWidth,frameMarginTop + frameHeight), 
+			new Rect(frameMarginLeft, frameMarginTop, 
+			frameWidth, frameHeight), 
 			FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 	}
 }
