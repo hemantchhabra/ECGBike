@@ -219,4 +219,12 @@ public class BlockGenerator : MonoBehaviour {
 		} 
 	}
 	
+	
+	void OnGUI() 
+	{
+		if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+			Application.LoadLevel(Application.loadedLevel); 	
+		}
+	}
+	
 }

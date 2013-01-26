@@ -17,19 +17,25 @@ public class BikeController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		bool touchRight = false, touchLeft = false; 
 		// Check for tilt inputs 
 #if UNITY_IPHONE
-		if (Input.acceleration.x >= 0.5f) 
+		/*if (Input.acceleration.x >= 0.5f) 
 			_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
 		else if (Input.acceleration.x <= -0.5f) 
-			_body.AddTorque(new Vector3(0, 0, torqueStrength));
-
+			_body.AddTorque(new Vector3(0, 0, torqueStrength));*/
+		foreach (Touch touch in Input.touches) { 
+			if (touch.position.x >= 2*Screen.width/3)
+				touchRight = true; 
+			if (touch.position.x < Screen.width/3)
+				touchLeft = true;
+		}
 #endif
 		
-		if (Input.GetKey(KeyCode.D)) { 
+		if (Input.GetKey(KeyCode.D) || touchRight) { 
 			_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
 		}
-		else if (Input.GetKey(KeyCode.A)) { 
+		else if (Input.GetKey(KeyCode.A) || touchLeft) { 
 			_body.AddTorque(new Vector3(0, 0, torqueStrength)); 	
 		}
 		else { 
