@@ -19,7 +19,11 @@ public class BikeController : MonoBehaviour
 	{
 		// Check for tilt inputs 
 #if UNITY_IPHONE
-		_body.AddTorque(new Vector3(0, 0, -2*torqueStrength*Input.acceleration.x));
+		if (Input.acceleration.x >= 0.5f) 
+			_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
+		else if (Input.acceleration.x <= -0.5f) 
+			_body.AddTorque(new Vector3(0, 0, torqueStrength));
+
 #endif
 		
 		if (Input.GetKey(KeyCode.D)) { 
