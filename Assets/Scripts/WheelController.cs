@@ -13,17 +13,33 @@ public class WheelController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (Input.GetKey(KeyCode.RightArrow)) { 
+	void FixedUpdate () {
+		bool touchRight = false; 
+		bool touchLeft = false;
+		
+#if UNITY_IPHONE
+		foreach (Touch touch in Input.touches) { 
+			if (touch.position.x >= 2*Screen.width/3)
+				touchRight = true; 
+			if (touch.position.x < Screen.width/3)
+				touchLeft = true; 
+		}
+		
+#else
+		touchRight = Input.GetKey(KeyCode.RightArrow); 
+		touchLeft = Input.GetKey(KeyCode.LeftArrow); 
+		
+#endif	
+		
+		if (touchRight) { 
 			_wheel.motorTorque = motorTorque; 
 		}
-		else if (Input.GetKey(KeyCode.LeftArrow)) { 
+		else if (touchLeft) { 
 			_wheel.motorTorque = -motorTorque; 
 		}	
 		else { 
 			_wheel.motorTorque = 0; 	
 		}
-		
 		
 	}
 }
