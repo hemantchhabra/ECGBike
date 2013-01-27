@@ -22,6 +22,9 @@ public class Health : MonoBehaviour {
 		get {
 			return currentHealth;
 		}
+		set { 
+			currentHealth = value; 	
+		}
 	}
 	
 	public bool IsDead {
@@ -41,7 +44,6 @@ public class Health : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
@@ -56,6 +58,8 @@ public class Health : MonoBehaviour {
 		currentHealth += healthkill;
 		if ( currentHealth < 0 ) {
 			currentHealth = 0;
+			
+			
 		}
 	}
 }

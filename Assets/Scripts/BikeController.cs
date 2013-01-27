@@ -13,19 +13,40 @@ public class BikeController : MonoBehaviour
 	void Start () 
 	{
 		_body = GetComponent<Rigidbody>(); 
-		bikerhealth = transform.Find( "bodyHealthTrigger" ).GetComponent<Health>();
+		//bikerhealth = transform.Find( "bodyHealthTrigger" ).GetComponent<Health>();
+		bikerhealth = GetComponentInChildren<Health>(); 
 		bikerscore = GetComponent<Score>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		
+		if (bikerhealth.IsDead) { 
+			Time.timeScale = 0; 
+		} 	
+		else { 
+			Time.timeScale = 1; 	
+		}
+		
+		bool touchLeft = false, touchRight = false; 
+#if UNITY_IPHONE
+		foreach (Touch touch in Input.touches) { 
+			if (touch.position.x <= Screen.width/3) 
+				touchLeft = true; 
+			if (touch.position.x >= 2*Screen.width/3)
+				touchRight = true; 
+		}
+		
+#endif
+
+		
 		// Check for tilt inputs 
 		if (!bikerhealth.IsDead) {
-			if (Input.GetKey(KeyCode.D)) { 
+			if (Input.GetKey(KeyCode.D) || touchRight) { 
 				_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
 			}
-			else if (Input.GetKey(KeyCode.A)) { 
+			else if (Input.GetKey(KeyCode.A) || touchLeft) { 
 				_body.AddTorque(new Vector3(0, 0, torqueStrength)); 	
 			}
 			else { 

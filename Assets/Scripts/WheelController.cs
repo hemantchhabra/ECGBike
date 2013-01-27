@@ -12,7 +12,8 @@ public class WheelController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_wheel = GetComponent<WheelCollider>();
-		bikerhealth = transform.parent.Find( "bodyHealthTrigger" ).GetComponent<Health>();
+		//bikerhealth = transform.parent.Find( "bodyHealthTrigger" ).GetComponent<Health>();
+		bikerhealth = transform.parent.GetComponentInChildren<Health>();
 		bikerscore = transform.parent.GetComponent<Score>();
 	}
 	

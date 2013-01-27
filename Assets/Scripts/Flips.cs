@@ -12,6 +12,9 @@ public class Flips : MonoBehaviour {
 	
 	private int _flips; 
 	
+	private Collider _bodyCol; 
+	private Health _bodyHealth; 
+	
 	// Use this for initialization
 	void Start () {
 		_body = GetComponent<Rigidbody>(); 
@@ -21,10 +24,19 @@ public class Flips : MonoBehaviour {
 		_thirdQuad = false; 
 		_fourthQuad = false; 
 		_flips = 0; 
+		
+		_bodyCol = transform.FindChild("body").GetComponent<Collider>(); 
+		_bodyHealth = GetComponentInChildren<Health>(); 
 	}
 	
-	void OnCollisionEnter(Collision other) { 
+	void OnCollisionEnter(Collision col) { 
 		_numCollisions++; 
+		// See if one of the contacts was our head 
+		foreach (ContactPoint contact in col.contacts) { 
+			if (contact.thisCollider == _bodyCol) { 
+				_bodyHealth.CurrentHealth -= col.impactForceSum.magnitude;
+			} 
+		} 
 	}
 	
 	void OnCollisionExit(Collision other) { 
@@ -64,6 +76,6 @@ public class Flips : MonoBehaviour {
 	
 	void OnGUI() { 
 		GUI.skin.label.fontSize = 24; 
-		GUI.Label(new Rect(200, 10, 100, 48), "Flips: " + _flips.ToString()); 
+		GUI.Label(new Rect(270, 20, 100, 48), "Flips: " + _flips.ToString()); 
 	} 
 }
