@@ -21,17 +21,8 @@ public class WheelController : MonoBehaviour {
 		touchLeft = Input.GetKey(KeyCode.LeftArrow); 
 		
 		
-#if UNITY_IPHONE
-		/*foreach (Touch touch in Input.touches) { 
-			if (touch.position.x >= 2*Screen.width/3)
-				touchRight = true; 
-			if (touch.position.x < Screen.width/3)
-				touchLeft = true; 
-		}*/
 		touchRight = true; 
-#endif	
-		
-	
+
 		
 		if (touchRight) { 
 			_wheel.motorTorque = motorTorque; 
