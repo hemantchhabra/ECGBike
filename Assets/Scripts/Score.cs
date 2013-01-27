@@ -77,7 +77,6 @@ public class Score : MonoBehaviour {
 			airtime = 0;
 			wheelietime = 0;
 			scoreboost = 0;
-			Debug.Log ("Body is grounded");
 		}
 		else if (Player.rigidbody.velocity.magnitude < 5) {
 			airtime = 0;

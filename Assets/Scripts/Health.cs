@@ -18,6 +18,12 @@ public class Health : MonoBehaviour {
 	
 	float currentHealth;
 	
+	public float CurrentHealth {
+		get {
+			return currentHealth;
+		}
+	}
+	
 	public bool IsDead {
 		get {
 			return currentHealth <= 0;
@@ -51,18 +57,5 @@ public class Health : MonoBehaviour {
 		if ( currentHealth < 0 ) {
 			currentHealth = 0;
 		}
-	}
-	
-	void OnGUI () {
-		float truewidth = ((float)currentHealth / (float)MaxHealth) * healthWidth;
-		GUI.DrawTexture( 
-			new Rect(healthMarginLeft, healthMarginTop,
-			(float)truewidth, healthHeight), 
-			HealthTexture, ScaleMode.ScaleAndCrop, true, 0 );
-
-    	GUI.DrawTexture( 
-			new Rect(frameMarginLeft, frameMarginTop, 
-			frameWidth, frameHeight), 
-			FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 	}
 }

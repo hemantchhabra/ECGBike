@@ -35,7 +35,7 @@ public class WheelController : MonoBehaviour {
 			}
 		}
 		else {
-				
+			_wheel.motorTorque = 0;
 		}
 		
 	}

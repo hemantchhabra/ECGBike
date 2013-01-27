@@ -22,9 +22,6 @@ public class BikeController : MonoBehaviour
 	{
 		// Check for tilt inputs 
 		if (!bikerhealth.IsDead) {
-#if UNITY_IPHONE
-			_body.AddTorque(new Vector3(0, 0, -2*torqueStrength*Input.acceleration.x));
-#endif
 			if (Input.GetKey(KeyCode.D)) { 
 				_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
 			}
@@ -36,7 +33,29 @@ public class BikeController : MonoBehaviour
 			}
 		}
 		else { 
-			_body.AddTorque(Vector3.zero);	
+			_body.AddTorque(Vector3.zero);
+		}
+	}
+	
+	
+	void OnGUI() 
+	{
+		if (bikerhealth.IsDead) {
+			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+				Application.LoadLevel(Application.loadedLevel); 	
+			}
+		}
+		else {
+			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
+			GUI.DrawTexture( 
+				new Rect(bikerhealth.healthMarginLeft, bikerhealth.healthMarginTop,
+				(float)truewidth, bikerhealth.healthHeight), 
+				bikerhealth.HealthTexture, ScaleMode.ScaleAndCrop, true, 0 );
+	
+	    	GUI.DrawTexture( 
+				new Rect(bikerhealth.frameMarginLeft, bikerhealth.frameMarginTop, 
+				bikerhealth.frameWidth, bikerhealth.frameHeight), 
+				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 		}
 	}
 }
