@@ -112,8 +112,6 @@ public class Score : MonoBehaviour {
 			trick = TrickMode.None;
 			sprite.spriteId = ground_id;
 		}
-		Debug.Log (airtime);
-		Debug.Log ( "Score is " + scoreboost.ToString () );
 		if ( bodyisgrounded ) {
 			airtime = 0;
 			wheelietime = 0;
@@ -128,7 +126,6 @@ public class Score : MonoBehaviour {
 		}
 		scoretime += scoreboost != 0 ? Time.deltaTime : 0;
 		CurrentScore += scoreboost;
-		Debug.Log ( "Score is " + scoreboost.ToString () );
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
