@@ -128,7 +128,6 @@ public class BlockGenerator : MonoBehaviour {
 	{ 
 		// Make a single straight block of constant length 
 		GameObject block = GameObject.Instantiate(basicCube)  as GameObject; 
-		GameObject boost = GameObject.Instantiate(speedBoost) as GameObject;
 		block.transform.localScale = new Vector3(straitLength, cubeHeight, 1);
 		
 		float cubeX = _currentX + straitLength/2; 
@@ -148,9 +147,6 @@ public class BlockGenerator : MonoBehaviour {
 		cubeY -= dis.y; 
 		
 		block.transform.position = new Vector3(cubeX, cubeY, 0f); 
-		
-		// Add a speed boost
-		boost.transform.position = new Vector3(cubeX, cubeY + 0.8f, 0f);
 		
 		_currentX = cubeX + straitLength/2; 
 		_currentY = cubeY; 

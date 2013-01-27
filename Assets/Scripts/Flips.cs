@@ -76,6 +76,6 @@ public class Flips : MonoBehaviour {
 	
 	void OnGUI() { 
 		GUI.skin.label.fontSize = 24; 
-		GUI.Label(new Rect(270, 20, 100, 48), "Flips: " + _flips.ToString()); 
+		GUI.Label(new Rect(270, 20, 100, 48), "Glips: " + _flips.ToString()); 
 	} 
 }
