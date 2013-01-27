@@ -13,7 +13,9 @@ public class Score : MonoBehaviour {
 	public long CurrentScore = 0;
 	public GameObject Player = null;
 	WheelCollider left = null, right = null;
+	BoxCollider body = null;
 	TrickMode trick = TrickMode.None;
+	bool bodyisgrounded = false;
 	int airtime = 0;
 	int wheelietime = 0;
 	int scoretime = 0;
@@ -37,6 +39,7 @@ public class Score : MonoBehaviour {
 		var wheels = Player.GetComponentsInChildren<WheelCollider>();
 		left = wheels[0];
 		right = wheels[1];
+		body = Player.GetComponent<BoxCollider>();
 	}
 	
 	// Update is called once per frame
@@ -55,6 +58,7 @@ public class Score : MonoBehaviour {
 			}
 			else if ( trick == TrickMode.None ) {
 				airtime = 0;
+				wheelietime = 0;
 			}
 			else {
 				++wheelietime;
@@ -65,15 +69,37 @@ public class Score : MonoBehaviour {
 		}
 		else {
 			airtime = 0;
+			wheelietime = 0;
 			scoreboost = 0;	
 			trick = TrickMode.None;
+		}
+		if ( bodyisgrounded ) {
+			airtime = 0;
+			wheelietime = 0;
+			scoreboost = 0;
+			Debug.Log ("Body is grounded");
+		}
+		else if (Player.rigidbody.velocity.magnitude < 5) {
+			airtime = 0;
+			wheelietime = 0;
+			scoreboost = 0;	
 		}
 		scoretime += scoreboost != 0 ? 1 : 0;
 		CurrentScore += scoreboost;
 	}
 	
+	void OnTriggerEnter ( Collider c ) {
+		if (!c.isTrigger)
+			bodyisgrounded = true;
+	}
+	
+	void OnTriggerExit ( Collider c ) {
+		if (!c.isTrigger)
+			bodyisgrounded = false;
+	}
+	
 	void OnGUI () {
-		GUI.Label( new Rect(), CurrentScore.ToString () );
+		GUI.Label( new Rect(Screen.width - 100, 10, 100, 20), CurrentScore.ToString () );
 		lastscoretime = scoretime;
 	}
 }
