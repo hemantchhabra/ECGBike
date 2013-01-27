@@ -10,7 +10,7 @@ public class Flips : MonoBehaviour {
 	// The quadrants we use to tell if we've had a flip
 	private bool _firstQuad, _secondQuad, _thirdQuad, _fourthQuad; 
 	
-	private int _flips; 
+	public int _flips; 
 	
 	// Use this for initialization
 	void Start () {
@@ -60,10 +60,5 @@ public class Flips : MonoBehaviour {
 			_fourthQuad = false; 
 		}
 		
-	}
-	
-	void OnGUI() { 
-		GUI.skin.label.fontSize = 24; 
-		GUI.Label(new Rect(200, 10, 100, 48), "Flips: " + _flips.ToString()); 
 	} 
 }

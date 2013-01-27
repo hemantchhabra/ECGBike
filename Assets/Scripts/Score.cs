@@ -23,7 +23,6 @@ public class Score : MonoBehaviour {
 	int airtime = 0;
 	int wheelietime = 0;
 	int scoretime = 0;
-	int lastscoretime = 0;
 	
 	public TrickMode Trick {
 		get {
@@ -117,7 +116,6 @@ public class Score : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-		GUI.Label( new Rect(Screen.width - 100, 10, 100, 20), CurrentScore.ToString () );
-		lastscoretime = scoretime;
+		
 	}
 }
