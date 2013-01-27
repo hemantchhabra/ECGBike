@@ -64,24 +64,23 @@ public class Score : MonoBehaviour {
 				}
 				//RaycastHit hit = new RaycastHit();
 				//Physics.Raycast(new Ray(transform.position, transform.InverseTransformDirection(new Vector3(0, -1, 0))), out hit);
-				if (_rb.velocity.y > 7 || sprite.spriteId == air_id) {
+				if (airtime > 90 || sprite.spriteId == air_id) {
 					sprite.spriteId = air_id;
-				} else {
-					sprite.spriteId = ground_id;
-				}
+				} 
 				//sprite.spriteId = air_id;
 			}
 			else if ( trick == TrickMode.None ) {
 				airtime = 0;
 				wheelietime = 0;
-				sprite.spriteId = ground_id;
+				if (sprite.spriteId == air_id) {
+					sprite.spriteId = ground_id;
+				}
 			}
 			else {
 				++wheelietime;
 				if (wheelietime > 10) {
 					scoreboost += wheelietime / 3;
 				}
-				sprite.spriteId = ground_id;
 			}
 		}
 		else {
@@ -95,13 +94,13 @@ public class Score : MonoBehaviour {
 			airtime = 0;
 			wheelietime = 0;
 			scoreboost = 0;
-			sprite.spriteId = ground_id;
+			//sprite.spriteId = ground_id;
 		}
 		else if (Player.rigidbody.velocity.magnitude < 5) {
 			airtime = 0;
 			wheelietime = 0;
 			scoreboost = 0;	
-			sprite.spriteId = ground_id;
+			//sprite.spriteId = ground_id;
 		}
 		scoretime += scoreboost != 0 ? 1 : 0;
 		CurrentScore += scoreboost;
