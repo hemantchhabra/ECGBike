@@ -101,6 +101,7 @@ public class BikeController : MonoBehaviour
 	
 	void OnGUI() 
 	{
+		GUI.skin = Skin;
 		if (bikerhealth.IsDead) {
 			GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
     		GUILayout.FlexibleSpace();
@@ -133,7 +134,6 @@ public class BikeController : MonoBehaviour
     		GUILayout.EndArea();
 		}
 		else {
-			GUI.skin = Skin;
 			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
 			GUI.DrawTexture( 
 				new Rect(bikerhealth.healthMarginLeft, bikerhealth.healthMarginTop,
@@ -144,38 +144,37 @@ public class BikeController : MonoBehaviour
 				new Rect(bikerhealth.frameMarginLeft, bikerhealth.frameMarginTop, 
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
-			
-			GUI.Label( new Rect(Screen.width - 300, 10, 230, 80),
-				string.Format(
-				"{0} Points\n{1} {2}Flip{3}\nBest Jump: {4} {5}Flip{6}", 
-				bikerscore.CurrentScore.ToString ("F1"),
-				bikerflips._flips, 
-				bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
-				bikerflips._flips > 43 ? "RADICAL " : 
-				bikerflips._flips > 30 ? "Gnarly " : 
-				bikerflips._flips > 20 ? "Boss " : 
-				bikerflips._flips > 17 ? "Crazy " : 
-				bikerflips._flips > 15 ? "Awesome " : 
-				bikerflips._flips > 12 ? "Amazing " : 
-				bikerflips._flips > 5 ? "Sweet " :
-				bikerflips._flips > 2 ? "Nice " : "",
-				bikerflips._flips == 0 || bikerflips._flips > 1 ? "s" : "",
-				
-				bikerflips._flipcombo, 
-				bikerflips._flipcombo > 60 ? "FLIPPALICIOUS " : 
-				bikerflips._flipcombo > 43 ? "RADICAL " : 
-				bikerflips._flipcombo > 30 ? "Gnarly " : 
-				bikerflips._flipcombo > 20 ? "Boss " : 
-				bikerflips._flipcombo > 17 ? "Crazy " : 
-				bikerflips._flipcombo > 15 ? "Awesome " : 
-				bikerflips._flipcombo > 12 ? "Amazing " : 
-				bikerflips._flipcombo > 5 ? "Sweet " :
-				bikerflips._flipcombo > 2 ? "Nice " : "",
-				bikerflips._flipcombo == 0 || bikerflips._flipcombo > 1 ? "s" : "",
-				
-				
-				0 ) ); 
-		
 		}
+		
+		GUI.Label( new Rect(Screen.width - 300, 10, 230, 80),
+			string.Format(
+			"{0} Points\n{1} {2}Flip{3}\nBest Jump: {4} {5}Flip{6}", 
+			bikerscore.CurrentScore.ToString ("F1"),
+			bikerflips._flips, 
+			bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
+			bikerflips._flips > 43 ? "RADICAL " : 
+			bikerflips._flips > 30 ? "Gnarly " : 
+			bikerflips._flips > 20 ? "Boss " : 
+			bikerflips._flips > 17 ? "Crazy " : 
+			bikerflips._flips > 15 ? "Awesome " : 
+			bikerflips._flips > 12 ? "Amazing " : 
+			bikerflips._flips > 5 ? "Sweet " :
+			bikerflips._flips > 2 ? "Nice " : "",
+			bikerflips._flips == 0 || bikerflips._flips > 1 ? "s" : "",
+			
+			bikerflips._flipcombo, 
+			bikerflips._flipcombo > 60 ? "FLIPPALICIOUS " : 
+			bikerflips._flipcombo > 43 ? "RADICAL " : 
+			bikerflips._flipcombo > 30 ? "Gnarly " : 
+			bikerflips._flipcombo > 20 ? "Boss " : 
+			bikerflips._flipcombo > 17 ? "Crazy " : 
+			bikerflips._flipcombo > 15 ? "Awesome " : 
+			bikerflips._flipcombo > 12 ? "Amazing " : 
+			bikerflips._flipcombo > 5 ? "Sweet " :
+			bikerflips._flipcombo > 2 ? "Nice " : "",
+			bikerflips._flipcombo == 0 || bikerflips._flipcombo > 1 ? "s" : "",
+			
+			
+			0 ) ); 
 	}
 }
