@@ -161,9 +161,14 @@ public class BlockGenerator : MonoBehaviour {
 		for (int i = 0; i < numBlocks; i++) { 
 			GameObject cube = GameObject.Instantiate(basicCube) as GameObject; 
 			cube.transform.parent = transform; 
-
-			float blockLength = (i % 2) == 0 ? minLength : Random.value * (maxLength - minLength) + minLength; 
-			float currentAngle = (i % 2) == 0 ? 0 : Random.value * (maxRotation - minRotation) + minRotation;
+			
+			//float newMaxAngle = Mathf.Min(maxRotation, _previousAngle + 30); 
+			//float newMinAngle = Mathf.Max(minRotation, _previousAngle - 30); 
+			float newMaxAngle = maxRotation; 
+			float newMinAngle = minRotation;
+			
+			float blockLength = Random.value * (maxLength - minLength) + minLength; 
+			float currentAngle = Random.value * (newMaxAngle - newMinAngle) + newMinAngle;
 			float cubeX = _currentX + blockLength / 2 * Mathf.Cos(currentAngle*Mathf.Deg2Rad); 
 			float cubeY = _currentY + blockLength / 2 * Mathf.Sin(currentAngle*Mathf.Deg2Rad); 
 			
@@ -216,6 +221,14 @@ public class BlockGenerator : MonoBehaviour {
 			
 			_currentBlocks.Add(cube.GetComponent<BlockAgent>());
 		} 
+	}
+	
+	
+	void OnGUI() 
+	{
+		if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+			Application.LoadLevel(Application.loadedLevel); 	
+		}
 	}
 	
 }
