@@ -126,7 +126,6 @@ public class BikeController : MonoBehaviour
 	
 	void OnGUI() 
 	{
-		
 			GUI.skin = Skin;
 			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
 		if (!bikerhealth.IsDead) { 
@@ -140,7 +139,7 @@ public class BikeController : MonoBehaviour
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 		}
-			GUI.Label( new Rect(Screen.width - 200, 10, 230, 80),
+			GUI.Label( new Rect(Screen.width - 230, 10, 230, 80),
 				string.Format(
 				"{0} Points\n{1} {2}Flip{3}", 
 				bikerscore.CurrentScore,
@@ -159,11 +158,12 @@ public class BikeController : MonoBehaviour
 				0 ) ); 
 		
 			if (bikerhealth.IsDead) {
-			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
-				Time.timeScale = 1; 
-				Application.LoadLevel(Application.loadedLevel); 	
+				if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+					Time.timeScale = 1; 
+					Application.LoadLevel(Application.loadedLevel); 	
+				}
 			}
-		}
+		
 			
 	}
 }
