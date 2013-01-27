@@ -23,6 +23,7 @@ public class BikeController : MonoBehaviour
 	public int MaxSpeedBoosts = 5;
 	public Vector3 BoostForce = new Vector3( 5, 0, 0 );
 	public float BoostCooldownSeconds = 5.0f;
+	public tk2dAnimatedSprite death;
 	
 	public void GrabSpeedBoost () {
 		++SpeedBoosts;
@@ -121,6 +122,9 @@ public class BikeController : MonoBehaviour
 			if ( sprite.spriteId != air_id ) {
 				sprite.spriteId = ground_id;
 			}
+			
+			death.transform.position = transform.position;
+			gameObject.SetActive(false);
 		}
 		timer -= 1;
 	}
