@@ -181,6 +181,10 @@ public class BikeController : MonoBehaviour
 				new Rect(bikerhealth.frameMarginLeft, bikerhealth.frameMarginTop, 
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
+			
+			if (GUI.Button(new Rect(32, 96, 96, 36), "Reset")) {
+				Application.LoadLevel(Application.loadedLevel);
+			}
 		}
 		
 		GUI.Label( new Rect(Screen.width - 300, 10, 230, 80),
