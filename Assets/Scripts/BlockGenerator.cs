@@ -148,12 +148,6 @@ public class BlockGenerator : MonoBehaviour {
 		
 		block.transform.position = new Vector3(cubeX, cubeY, 0f); 
 		
-		// Add a speed boost
-		if(Random.value < 0.3f) {
-			GameObject boost = GameObject.Instantiate(speedBoost) as GameObject;
-			boost.transform.position = new Vector3(cubeX, cubeY + 0.8f, 0f);
-		}
-		
 		_currentX = cubeX + straitLength/2; 
 		_currentY = cubeY; 
 		_previousAngle = 0; 
