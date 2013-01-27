@@ -153,6 +153,8 @@ public class BlockGenerator : MonoBehaviour {
 	}
 	
 	private void generateHeartbeat() { 
+		GetComponent<AudioSource>().Play();
+		
 		for (int i = 0; i < numBlocks; i++) { 
 			GameObject cube = GameObject.Instantiate(basicCube) as GameObject; 
 			cube.transform.parent = transform; 

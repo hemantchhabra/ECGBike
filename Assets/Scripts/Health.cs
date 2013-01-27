@@ -18,9 +18,27 @@ public class Health : MonoBehaviour {
 	
 	float currentHealth;
 	
+	public AudioClip[] deathClips; 
+	public AudioClip[] damageClips;
+	
 	public float CurrentHealth {
 		get {
 			return currentHealth;
+		}
+		set { 
+			if (currentHealth > 0 && value <= 0) { 
+				if (deathClips.Length > 0) { 
+					AudioClip clip = deathClips[Mathf.FloorToInt(Random.value*deathClips.Length)]; 
+					AudioSource.PlayClipAtPoint(clip, Vector3.zero);
+				}	
+			}
+			else if (value < currentHealth) { 
+				if (damageClips.Length > 0) { 
+					AudioClip clip = damageClips[Mathf.FloorToInt(Random.value*damageClips.Length)];
+					AudioSource.PlayClipAtPoint(clip, Vector3.zero); 
+				} 
+			} 
+			currentHealth = value; 	
 		}
 	}
 	
@@ -41,7 +59,6 @@ public class Health : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
@@ -56,6 +73,8 @@ public class Health : MonoBehaviour {
 		currentHealth += healthkill;
 		if ( currentHealth < 0 ) {
 			currentHealth = 0;
+			
+			
 		}
 	}
 }

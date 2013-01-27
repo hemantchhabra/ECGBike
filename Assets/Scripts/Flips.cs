@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Flips : MonoBehaviour {
 	
+	public AudioClip[] flipSounds; 
+	
 	private Rigidbody _body; 
 	
 	private int _numCollisions; 
@@ -14,6 +16,11 @@ public class Flips : MonoBehaviour {
 	public int _currflips = 0;
 	public int _flipcombo = 0;
 	
+	private Collider _bodyCol; 
+	private Health _bodyHealth; 
+	
+	private AudioSource _audioSource; 
+	
 	// Use this for initialization
 	void Start () {
 		_body = GetComponent<Rigidbody>(); 
@@ -22,13 +29,25 @@ public class Flips : MonoBehaviour {
 		_secondQuad = false; 
 		_thirdQuad = false; 
 		_fourthQuad = false; 
-		_flips = 0;
+		_flips = 0; 
+		
+		_bodyCol = transform.FindChild("body").GetComponent<Collider>(); 
+		_bodyHealth = GetComponentInChildren<Health>(); 
+		
+		_audioSource = GetComponent<AudioSource>();
+
 		_currflips = 0;
 		_flipcombo = 0;
 	}
 	
-	void OnCollisionEnter(Collision other) { 
+	void OnCollisionEnter(Collision col) { 
 		_numCollisions++; 
+		// See if one of the contacts was our head 
+		foreach (ContactPoint contact in col.contacts) { 
+			if (contact.thisCollider == _bodyCol) { 
+				_bodyHealth.CurrentHealth -= col.impactForceSum.magnitude;
+			} 
+		} 
 	}
 	
 	void OnCollisionExit(Collision other) { 
@@ -56,9 +75,20 @@ public class Flips : MonoBehaviour {
 			_currflips = 0;
 		}
 		
+		if (_bodyHealth.CurrentHealth <= 0) { 
+			_audioSource.Stop();	
+		} 
+		
+	
 		// If we've seen all the quads, it was a flip 
 		if (_firstQuad && _secondQuad && _thirdQuad && _fourthQuad) { 
 			_flips++; 
+			// Play a sound!
+			if (flipSounds.Length > 0) { 
+				AudioClip clip = flipSounds[Mathf.FloorToInt(Random.value*flipSounds.Length)]; 
+				AudioSource.PlayClipAtPoint(clip, Vector3.zero);
+			} 
+			
 			_firstQuad = false; 
 			_secondQuad = false; 
 			_thirdQuad = false; 
@@ -68,5 +98,5 @@ public class Flips : MonoBehaviour {
 				_flipcombo = _currflips;
 		}
 		
-	} 
+	}
 }
