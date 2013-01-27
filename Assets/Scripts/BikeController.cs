@@ -175,6 +175,10 @@ public class BikeController : MonoBehaviour
 				
 				
 				0 ) ); 
+			
+			if (GUI.Button(new Rect(32, 96, 96, 36), "Try again?")) {
+				Application.LoadLevel(Application.loadedLevel); 	
+			}
 		
 		}
 	}
