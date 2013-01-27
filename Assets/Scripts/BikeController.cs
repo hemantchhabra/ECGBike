@@ -102,9 +102,35 @@ public class BikeController : MonoBehaviour
 	void OnGUI() 
 	{
 		if (bikerhealth.IsDead) {
-			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+			GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+    		GUILayout.FlexibleSpace();
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+
+    		GUILayout.Box(string.Format("You completed {0} {1} flips.", 
+				bikerflips._flips,
+				bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
+				bikerflips._flips > 43 ? "RADICAL " : 
+				bikerflips._flips > 30 ? "Gnarly " : 
+				bikerflips._flips > 20 ? "Boss " : 
+				bikerflips._flips > 17 ? "Crazy " : 
+				bikerflips._flips > 15 ? "Awesome " : 
+				bikerflips._flips > 12 ? "Amazing " : 
+				bikerflips._flips > 5 ? "Sweet " :
+				bikerflips._flips > 2 ? "Nice " : ""));
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+			//if (GUI.Button(new Rect(Screen.width * 0.5f - 230, Screen.height * 0.5f - 80, 96, 48), "Reset")) {
+			GUILayout.BeginHorizontal();
+			GUILayout.FlexibleSpace();
+			if (GUILayout.Button("Try again?")) {
 				Application.LoadLevel(Application.loadedLevel); 	
 			}
+			
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+    		GUILayout.FlexibleSpace();
+    		GUILayout.EndArea();
 		}
 		else {
 			GUI.skin = Skin;
@@ -119,7 +145,7 @@ public class BikeController : MonoBehaviour
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 			
-			GUI.Label( new Rect(Screen.width - 200, 10, 230, 80),
+			GUI.Label( new Rect(Screen.width - 230, 10, 230, 80),
 				string.Format(
 				"{0} Points\n{1} {2}Flip{3}", 
 				bikerscore.CurrentScore,
