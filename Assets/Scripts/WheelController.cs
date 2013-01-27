@@ -22,19 +22,7 @@ public class WheelController : MonoBehaviour {
 		bool touchLeft = false;
 		
 		if ( !bikerhealth.IsDead ) {
-	#if UNITY_IPHONE
-			foreach (Touch touch in Input.touches) { 
-				if (touch.position.x >= 2*Screen.width/3)
-					touchRight = true; 
-				if (touch.position.x < Screen.width/3)
-					touchLeft = true; 
-			}
-			
-	#else
-			touchRight = Input.GetKey(KeyCode.RightArrow); 
-			touchLeft = Input.GetKey(KeyCode.LeftArrow); 
-			
-	#endif	
+			touchRight = true;
 			
 			if (touchRight) { 
 				_wheel.motorTorque = motorTorque; 

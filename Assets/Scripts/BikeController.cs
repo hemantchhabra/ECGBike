@@ -22,7 +22,9 @@ public class BikeController : MonoBehaviour
 	{
 		// Check for tilt inputs 
 		if (!bikerhealth.IsDead) {
+#if UNITY_IPHONE
 			_body.AddTorque(new Vector3(0, 0, -2*torqueStrength*Input.acceleration.x));
+#endif
 			if (Input.GetKey(KeyCode.D)) { 
 				_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
 			}
