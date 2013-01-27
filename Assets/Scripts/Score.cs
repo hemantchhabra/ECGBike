@@ -13,6 +13,7 @@ public class Score : MonoBehaviour {
 	public tk2dSprite sprite;
 	public long CurrentScore = 0;
 	public GameObject Player = null;
+	private Rigidbody _rb = null;
 	private int air_id = 0;
 	private int ground_id = 0;
 	WheelCollider left = null, right = null;
@@ -43,6 +44,7 @@ public class Score : MonoBehaviour {
 		left = wheels[0];
 		right = wheels[1];
 		body = Player.GetComponent<BoxCollider>();
+		_rb = Player.GetComponent<Rigidbody>();
 		air_id = sprite.GetSpriteIdByName("big_air");
 		ground_id = sprite.GetSpriteIdByName("bike_rider");
 	}
@@ -60,7 +62,14 @@ public class Score : MonoBehaviour {
 				if ( airtime > 10 ) {
 					scoreboost += airtime;
 				}
-				sprite.spriteId = air_id;
+				//RaycastHit hit = new RaycastHit();
+				//Physics.Raycast(new Ray(transform.position, transform.InverseTransformDirection(new Vector3(0, -1, 0))), out hit);
+				if (_rb.velocity.y > 7 || sprite.spriteId == air_id) {
+					sprite.spriteId = air_id;
+				} else {
+					sprite.spriteId = ground_id;
+				}
+				//sprite.spriteId = air_id;
 			}
 			else if ( trick == TrickMode.None ) {
 				airtime = 0;
