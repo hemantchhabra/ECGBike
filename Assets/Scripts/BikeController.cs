@@ -7,13 +7,37 @@ public class BikeController : MonoBehaviour
 	private Rigidbody _body = null; 
 	private Health bikerhealth = null;
 	private Score bikerscore = null;
+	private Flips bikerflips = null;
+	private float boostcooldown = 0.0f;
 	private int timer = 0;
 	private int forward_id = 0;
 	private int back_id = 0;
 	private int air_id = 0;
 	private int ground_id = 0;
 	public float torqueStrength = 22f; 
-	public tk2dSprite sprite;
+	public tk2dSprite sprite = null;
+	public GUISkin Skin = null;
+	public int SpeedBoosts = 3;
+	public int MaxSpeedBoosts = 5;
+	public Vector3 BoostForce = new Vector3( 5, 0, 0 );
+	public float BoostCooldownSeconds = 5.0f;
+	
+	public void GrabSpeedBoost () {
+		++SpeedBoosts;
+		if ( SpeedBoosts > MaxSpeedBoosts ) {
+			SpeedBoosts = MaxSpeedBoosts;
+		}
+	}
+	
+	public bool UseSpeedBoost () {
+		if (SpeedBoosts > 0) {
+			--SpeedBoosts;
+			if ( _body != null )
+				_body.AddForce( BoostForce, ForceMode.Impulse );
+			return true;
+		}
+		return false;
+	}
 	
 	// Use this for initialization
 	void Start () 
@@ -22,6 +46,7 @@ public class BikeController : MonoBehaviour
 		//bikerhealth = transform.Find( "bodyHealthTrigger" ).GetComponent<Health>();
 		bikerhealth = GetComponentInChildren<Health>(); 
 		bikerscore = GetComponent<Score>();
+		bikerflips = GetComponent<Flips>();
 		air_id = sprite.GetSpriteIdByName("big_air");
 		ground_id = sprite.GetSpriteIdByName("bike_rider");
 		forward_id = sprite.GetSpriteIdByName("lean_forward_bike");
@@ -33,7 +58,7 @@ public class BikeController : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
 		
 		if (bikerhealth.IsDead) { 
@@ -79,10 +104,19 @@ public class BikeController : MonoBehaviour
 					timer = -5;
 				}
 			}
+			
+			if (boostcooldown > 0.0f) {
+				boostcooldown -= Time.deltaTime;	
+			}
+			else if (boostcooldown <= 0.0f) {
+				if (Input.GetKey (KeyCode.Space) && UseSpeedBoost()) {
+					boostcooldown = BoostCooldownSeconds;		
+				}
+			}
 		}
 		else { 
 			_body.AddTorque(Vector3.zero);
-			if(sprite.spriteId != air_id) {
+			if ( sprite.spriteId != air_id ) {
 				sprite.spriteId = ground_id;
 			}
 		}
@@ -92,13 +126,10 @@ public class BikeController : MonoBehaviour
 	
 	void OnGUI() 
 	{
-		if (bikerhealth.IsDead) {
-			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
-				Application.LoadLevel(Application.loadedLevel); 	
-			}
-		}
-		else {
+		
+			GUI.skin = Skin;
 			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
+		if (!bikerhealth.IsDead) { 
 			GUI.DrawTexture( 
 				new Rect(bikerhealth.healthMarginLeft, bikerhealth.healthMarginTop,
 				(float)truewidth, bikerhealth.healthHeight), 
@@ -109,5 +140,30 @@ public class BikeController : MonoBehaviour
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 		}
+			GUI.Label( new Rect(Screen.width - 200, 10, 230, 80),
+				string.Format(
+				"{0} Points\n{1} {2}Flip{3}", 
+				bikerscore.CurrentScore,
+				bikerflips._flips, 
+				bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
+				bikerflips._flips > 43 ? "RADICAL " : 
+				bikerflips._flips > 30 ? "Gnarly " : 
+				bikerflips._flips > 20 ? "Boss " : 
+				bikerflips._flips > 17 ? "Crazy " : 
+				bikerflips._flips > 15 ? "Awesome " : 
+				bikerflips._flips > 12 ? "Amazing " : 
+				bikerflips._flips > 5 ? "Sweet " :
+				bikerflips._flips > 2 ? "Nice " : "",
+				
+				bikerflips._flips == 0 || bikerflips._flips > 1 ? "s" : "", 
+				0 ) ); 
+		
+			if (bikerhealth.IsDead) {
+			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+				Time.timeScale = 1; 
+				Application.LoadLevel(Application.loadedLevel); 	
+			}
+		}
+			
 	}
 }

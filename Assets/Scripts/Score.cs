@@ -23,7 +23,10 @@ public class Score : MonoBehaviour {
 	int airtime = 0;
 	int wheelietime = 0;
 	int scoretime = 0;
-	int lastscoretime = 0;
+	
+	private AudioSource _audioSource; 
+	
+	private Health _playerHealth; 
 	
 	public TrickMode Trick {
 		get {
@@ -47,10 +50,14 @@ public class Score : MonoBehaviour {
 		_rb = Player.GetComponent<Rigidbody>();
 		air_id = sprite.GetSpriteIdByName("big_air");
 		ground_id = sprite.GetSpriteIdByName("bike_rider");
+		_playerHealth = GetComponentInChildren<Health>(); 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (_playerHealth.CurrentHealth <= 0) 
+			return;
+		
 		long scoreboost = 0;
 		if (left != null && right != null) {
 			bool leftgrounded = left.isGrounded;
@@ -117,7 +124,6 @@ public class Score : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-		GUI.Label( new Rect(Screen.width - 100, 10, 100, 20), CurrentScore.ToString () );
-		lastscoretime = scoretime;
+		
 	}
 }

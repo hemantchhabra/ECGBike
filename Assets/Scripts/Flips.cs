@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Flips : MonoBehaviour {
 	
+	public AudioClip[] flipSounds; 
+	
 	private Rigidbody _body; 
 	
 	private int _numCollisions; 
@@ -10,10 +12,12 @@ public class Flips : MonoBehaviour {
 	// The quadrants we use to tell if we've had a flip
 	private bool _firstQuad, _secondQuad, _thirdQuad, _fourthQuad; 
 	
-	private int _flips; 
+	public int _flips; 
 	
 	private Collider _bodyCol; 
 	private Health _bodyHealth; 
+	
+	private AudioSource _audioSource; 
 	
 	// Use this for initialization
 	void Start () {
@@ -27,6 +31,8 @@ public class Flips : MonoBehaviour {
 		
 		_bodyCol = transform.FindChild("body").GetComponent<Collider>(); 
 		_bodyHealth = GetComponentInChildren<Health>(); 
+		
+		_audioSource = GetComponent<AudioSource>();
 	}
 	
 	void OnCollisionEnter(Collision col) { 
@@ -63,9 +69,20 @@ public class Flips : MonoBehaviour {
 			_fourthQuad = false; 
 		}
 		
+		if (_bodyHealth.CurrentHealth <= 0) { 
+			_audioSource.Stop();	
+		} 
+		
+	
 		// If we've seen all the quads, it was a flip 
 		if (_firstQuad && _secondQuad && _thirdQuad && _fourthQuad) { 
 			_flips++; 
+			// Play a sound!
+			if (flipSounds.Length > 0) { 
+				AudioClip clip = flipSounds[Mathf.FloorToInt(Random.value*flipSounds.Length)]; 
+				AudioSource.PlayClipAtPoint(clip, Vector3.zero);
+			} 
+			
 			_firstQuad = false; 
 			_secondQuad = false; 
 			_thirdQuad = false; 
@@ -73,9 +90,4 @@ public class Flips : MonoBehaviour {
 		}
 		
 	}
-	
-	void OnGUI() { 
-		GUI.skin.label.fontSize = 24; 
-		GUI.Label(new Rect(270, 20, 100, 48), "Glips: " + _flips.ToString()); 
-	} 
 }

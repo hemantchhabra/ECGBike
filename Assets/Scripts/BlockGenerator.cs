@@ -15,8 +15,8 @@ public class BlockGenerator : MonoBehaviour {
 	
 	public float straitLength = 20; 
 	
-	public float minRotation = -60; 
-	public float maxRotation = 60; 
+	public float minRotation = -45; 
+	public float maxRotation = 45; 
 	
 	public float cubeHeight = 0.5f; 
 	
@@ -44,7 +44,6 @@ public class BlockGenerator : MonoBehaviour {
 		generateStrait();
 		generateHeartbeat();
 		generateStrait();
-		
 		
 	}
 	
@@ -79,7 +78,7 @@ public class BlockGenerator : MonoBehaviour {
 	private void updateHeartbeat() 
 	{	
 		
-		_heartbeatTime += Time.deltaTime; 
+		_heartbeatTime += Time.deltaTime;
 		if (_heartbeatTime >= totalHeartbeatTime) { 
 			_heartbeatTime = totalHeartbeatTime; 
 			_doingHeartbeat = false;
@@ -154,6 +153,8 @@ public class BlockGenerator : MonoBehaviour {
 	}
 	
 	private void generateHeartbeat() { 
+		GetComponent<AudioSource>().Play();
+		
 		for (int i = 0; i < numBlocks; i++) { 
 			GameObject cube = GameObject.Instantiate(basicCube) as GameObject; 
 			cube.transform.parent = transform; 
