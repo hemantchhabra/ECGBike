@@ -4,6 +4,7 @@ using System.Collections;
 public class BikeController : MonoBehaviour 
 {
 	
+	private bool exploded = false;
 	private Rigidbody _body = null; 
 	private Health bikerhealth = null;
 	private Score bikerscore = null;
@@ -16,6 +17,7 @@ public class BikeController : MonoBehaviour
 	private int ground_id = 0;
 	public float torqueStrength = 22f; 
 	public tk2dSprite sprite = null;
+	public ParticleSystem Explode = null;
 	public GUISkin Skin = null;
 	public int SpeedBoosts = 3;
 	public int MaxSpeedBoosts = 5;
@@ -52,6 +54,7 @@ public class BikeController : MonoBehaviour
 		forward_id = sprite.GetSpriteIdByName("lean_forward_bike");
 		back_id = sprite.GetSpriteIdByName("lean_back_bike");
 		timer = -5;
+		exploded = false;
 #if UNITY_IPHONE
 		torqueStrength *= 1.5f; 	
 #endif
@@ -61,12 +64,12 @@ public class BikeController : MonoBehaviour
 	void FixedUpdate () 
 	{
 		
-		if (bikerhealth.IsDead) { 
+		/*if (bikerhealth.IsDead) { 
 			Time.timeScale = 0; 
 		} 	
 		else { 
 			Time.timeScale = 1; 	
-		}
+		}*/
 		
 		bool touchLeft = false, touchRight = false; 
 #if UNITY_IPHONE
@@ -78,7 +81,6 @@ public class BikeController : MonoBehaviour
 		}
 		
 #endif
-
 		
 		// Check for tilt inputs 
 		if (!bikerhealth.IsDead) {
@@ -128,12 +130,16 @@ public class BikeController : MonoBehaviour
 	{
 		GUI.skin = Skin;
 		if (bikerhealth.IsDead) {
+			if ( !exploded && _body.velocity.magnitude < 0.1f ) {
+				exploded = true;
+				Instantiate( Explode, transform.position, transform.rotation );
+			}
 			GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
     		GUILayout.FlexibleSpace();
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
 
-    		GUILayout.Box(string.Format("You completed {0} {1} flips.", 
+    		GUILayout.Box( string.Format("You completed {0} {1} flips and scored {2} points!", 
 				bikerflips._flips,
 				bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
 				bikerflips._flips > 43 ? "RADICAL " : 
@@ -143,7 +149,8 @@ public class BikeController : MonoBehaviour
 				bikerflips._flips > 15 ? "awesome " : 
 				bikerflips._flips > 12 ? "amazing " : 
 				bikerflips._flips > 5 ? "sweet " :
-				bikerflips._flips > 2 ? "nice " : ""));
+				bikerflips._flips > 2 ? "nice " : "",
+				bikerscore.CurrentScore.ToString ("F1") ) );
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 			//if (GUI.Button(new Rect(Screen.width * 0.5f - 230, Screen.height * 0.5f - 80, 96, 48), "Reset")) {
@@ -160,7 +167,6 @@ public class BikeController : MonoBehaviour
 		}
 		else {
 			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
-		if (!bikerhealth.IsDead) { 
 			GUI.DrawTexture( 
 				new Rect(bikerhealth.healthMarginLeft, bikerhealth.healthMarginTop,
 				(float)truewidth, bikerhealth.healthHeight), 
@@ -170,14 +176,7 @@ public class BikeController : MonoBehaviour
 				new Rect(bikerhealth.frameMarginLeft, bikerhealth.frameMarginTop, 
 				bikerhealth.frameWidth, bikerhealth.frameHeight), 
 				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
-			if (bikerhealth.IsDead) {
-				if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
-					Time.timeScale = 1; 
-					Application.LoadLevel(Application.loadedLevel); 	
-				}
-			}
-		
-			
+		}
 		
 		GUI.Label( new Rect(Screen.width - 300, 10, 230, 80),
 			string.Format(
@@ -205,9 +204,7 @@ public class BikeController : MonoBehaviour
 			bikerflips._flipcombo > 12 ? "Amazing " : 
 			bikerflips._flipcombo > 5 ? "Sweet " :
 			bikerflips._flipcombo > 2 ? "Nice " : "",
-			bikerflips._flipcombo == 0 || bikerflips._flipcombo > 1 ? "s" : "",
-			
-			
-			0 ) ); 
+			bikerflips._flipcombo == 0 || bikerflips._flipcombo > 1 ? "s" : "" )
+		);
 	}
 }

@@ -27,6 +27,7 @@ public class Score : MonoBehaviour {
 	private AudioSource _audioSource; 
 	
 	private Health _playerHealth; 
+	private Flips bikerflips;
 	
 	public TrickMode Trick {
 		get {
@@ -52,6 +53,7 @@ public class Score : MonoBehaviour {
 		air_id = sprite.GetSpriteIdByName("big_air");
 		ground_id = sprite.GetSpriteIdByName("bike_rider");
 		_playerHealth = GetComponentInChildren<Health>(); 
+		bikerflips = GetComponent<Flips>(); 
 	}
 	
 	// Update is called once per frame
@@ -59,14 +61,14 @@ public class Score : MonoBehaviour {
 		if (_playerHealth.CurrentHealth <= 0) 
 			return;
 		
-		long scoreboost = 0;
-		Reset ();
+		//Reset ();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (_playerHealth.CurrentHealth <= 0) 
 			return;
+		
 		float scoreboost = 0;
 		if (left != null && right != null) {
 			bool leftgrounded = left.isGrounded;
@@ -74,14 +76,15 @@ public class Score : MonoBehaviour {
 			trick = !rightgrounded ? (trick | TrickMode.FrontWheelUp) : (trick & ~TrickMode.FrontWheelUp);
 			trick = !leftgrounded ? (trick | TrickMode.BackWheelUp) : (trick & ~TrickMode.BackWheelUp);
 			if ( trick == TrickMode.AllWheelsUp ) {
-				airtime += Time.fixedDeltaTime;
-				if ( airtime > 1 ) {
-					scoreboost += airtime;
+				airtime += Time.deltaTime;
+				if ( airtime > 0.5f ) {
+					scoreboost += airtime * ( bikerflips._currflips + 1 );
 				}
 				//RaycastHit hit = new RaycastHit();
 				//Physics.Raycast(new Ray(transform.position, transform.InverseTransformDirection(new Vector3(0, -1, 0))), out hit);
-				if (airtime > 4 || sprite.spriteId == air_id) {
+				if (airtime > 1.5f || sprite.spriteId == air_id) {
 					sprite.spriteId = air_id;
+					scoreboost += airtime * ( bikerflips._currflips + 1 );
 				} 
 				//sprite.spriteId = air_id;
 			}
@@ -93,9 +96,9 @@ public class Score : MonoBehaviour {
 				}
 			}
 			else {
-				wheelietime = Time.fixedDeltaTime;
-				if (wheelietime > 1) {
-					scoreboost += wheelietime / 3;
+				wheelietime += Time.deltaTime;
+				if (wheelietime > 0.4f) {
+					scoreboost += wheelietime;
 				}
 				if (sprite.spriteId == air_id) {
 					sprite.spriteId = ground_id;
@@ -109,20 +112,23 @@ public class Score : MonoBehaviour {
 			trick = TrickMode.None;
 			sprite.spriteId = ground_id;
 		}
+		Debug.Log (airtime);
+		Debug.Log ( "Score is " + scoreboost.ToString () );
 		if ( bodyisgrounded ) {
 			airtime = 0;
 			wheelietime = 0;
 			scoreboost = 0;
 			sprite.spriteId = ground_id;
 		}
-		else if (Player.rigidbody.velocity.magnitude < 5) {
+		else if (Player.rigidbody.velocity.magnitude < 0.1f) {
 			airtime = 0;
 			wheelietime = 0;
-			scoreboost = 0;	
-			//sprite.spriteId = ground_id;
+			scoreboost = 0;
+			sprite.spriteId = ground_id;
 		}
-		scoretime += scoreboost != 0 ? Time.fixedDeltaTime : 0;
+		scoretime += scoreboost != 0 ? Time.deltaTime : 0;
 		CurrentScore += scoreboost;
+		Debug.Log ( "Score is " + scoreboost.ToString () );
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
