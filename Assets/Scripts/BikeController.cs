@@ -111,13 +111,13 @@ public class BikeController : MonoBehaviour
 				bikerflips._flips,
 				bikerflips._flips > 60 ? "FLIPPALICIOUS " : 
 				bikerflips._flips > 43 ? "RADICAL " : 
-				bikerflips._flips > 30 ? "Gnarly " : 
-				bikerflips._flips > 20 ? "Boss " : 
-				bikerflips._flips > 17 ? "Crazy " : 
-				bikerflips._flips > 15 ? "Awesome " : 
-				bikerflips._flips > 12 ? "Amazing " : 
-				bikerflips._flips > 5 ? "Sweet " :
-				bikerflips._flips > 2 ? "Nice " : ""));
+				bikerflips._flips > 30 ? "gnarly " : 
+				bikerflips._flips > 20 ? "boss " : 
+				bikerflips._flips > 17 ? "crazy " : 
+				bikerflips._flips > 15 ? "awesome " : 
+				bikerflips._flips > 12 ? "amazing " : 
+				bikerflips._flips > 5 ? "sweet " :
+				bikerflips._flips > 2 ? "nice " : ""));
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
 			//if (GUI.Button(new Rect(Screen.width * 0.5f - 230, Screen.height * 0.5f - 80, 96, 48), "Reset")) {
