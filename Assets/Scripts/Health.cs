@@ -16,13 +16,19 @@ public class Health : MonoBehaviour {
 	public int frameMarginLeft  = 10;
 	public int frameMarginTop = 10;
 	
+	float currentHealth;
+	
+	public float CurrentHealth {
+		get {
+			return currentHealth;
+		}
+	}
+	
 	public bool IsDead {
 		get {
 			return currentHealth <= 0;
 		}
 	}
-	
-	float currentHealth;
 	
 	// Use this for initialization
 	void Start () {
@@ -39,26 +45,17 @@ public class Health : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter ( Collider c ) {
-		float healthkill = 6;
+		float healthkill = 0;
 		if ( c != null ) {
-			healthkill *= transform.parent.rigidbody.velocity.magnitude;
+			healthkill = -3;
+			if (!c.isTrigger)
+				healthkill *= transform.parent.rigidbody.velocity.magnitude;
+			else
+				healthkill = 0;
 		}
-		currentHealth -= healthkill;
+		currentHealth += healthkill;
 		if ( currentHealth < 0 ) {
 			currentHealth = 0;
 		}
-	}
-	
-	void OnGUI () {
-		float truewidth = ((float)currentHealth / (float)MaxHealth) * healthWidth;
-		GUI.DrawTexture( 
-			new Rect(healthMarginLeft, healthMarginTop,
-			(float)truewidth, healthHeight), 
-			HealthTexture, ScaleMode.ScaleAndCrop, true, 0 );
-
-    	GUI.DrawTexture( 
-			new Rect(frameMarginLeft, frameMarginTop, 
-			frameWidth, frameHeight), 
-			FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 	}
 }

@@ -4,42 +4,58 @@ using System.Collections;
 public class BikeController : MonoBehaviour 
 {
 	
-	private Rigidbody _body; 
-	
+	private Rigidbody _body = null; 
+	private Health bikerhealth = null;
+	private Score bikerscore = null;
 	public float torqueStrength = 22f; 
 	
 	// Use this for initialization
 	void Start () 
 	{
 		_body = GetComponent<Rigidbody>(); 
+		bikerhealth = transform.Find( "bodyHealthTrigger" ).GetComponent<Health>();
+		bikerscore = GetComponent<Score>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		bool touchRight = false, touchLeft = false; 
 		// Check for tilt inputs 
-#if UNITY_IPHONE
-		/*if (Input.acceleration.x >= 0.5f) 
-			_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
-		else if (Input.acceleration.x <= -0.5f) 
-			_body.AddTorque(new Vector3(0, 0, torqueStrength));*/
-		foreach (Touch touch in Input.touches) { 
-			if (touch.position.x >= 2*Screen.width/3)
-				touchRight = true; 
-			if (touch.position.x < Screen.width/3)
-				touchLeft = true;
-		}
-#endif
-		
-		if (Input.GetKey(KeyCode.D) || touchRight) { 
-			_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
-		}
-		else if (Input.GetKey(KeyCode.A) || touchLeft) { 
-			_body.AddTorque(new Vector3(0, 0, torqueStrength)); 	
+		if (!bikerhealth.IsDead) {
+			if (Input.GetKey(KeyCode.D)) { 
+				_body.AddTorque(new Vector3(0, 0, -torqueStrength)); 
+			}
+			else if (Input.GetKey(KeyCode.A)) { 
+				_body.AddTorque(new Vector3(0, 0, torqueStrength)); 	
+			}
+			else { 
+				_body.AddTorque(Vector3.zero);	
+			}
 		}
 		else { 
-			_body.AddTorque(Vector3.zero);	
+			_body.AddTorque(Vector3.zero);
+		}
+	}
+	
+	
+	void OnGUI() 
+	{
+		if (bikerhealth.IsDead) {
+			if (GUI.Button(new Rect(10, 10, 96, 48), "Reset")) { 
+				Application.LoadLevel(Application.loadedLevel); 	
+			}
+		}
+		else {
+			float truewidth = ((float)bikerhealth.CurrentHealth / (float)bikerhealth.MaxHealth) * bikerhealth.healthWidth;
+			GUI.DrawTexture( 
+				new Rect(bikerhealth.healthMarginLeft, bikerhealth.healthMarginTop,
+				(float)truewidth, bikerhealth.healthHeight), 
+				bikerhealth.HealthTexture, ScaleMode.ScaleAndCrop, true, 0 );
+	
+	    	GUI.DrawTexture( 
+				new Rect(bikerhealth.frameMarginLeft, bikerhealth.frameMarginTop, 
+				bikerhealth.frameWidth, bikerhealth.frameHeight), 
+				bikerhealth.FrameTexture, ScaleMode.ScaleToFit, true, 0 );
 		}
 	}
 }
