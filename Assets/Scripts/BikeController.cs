@@ -123,8 +123,6 @@ public class BikeController : MonoBehaviour
 				sprite.spriteId = ground_id;
 			}
 			
-			death.transform.position = transform.position;
-			gameObject.SetActive(false);
 		}
 		timer -= 1;
 	}
@@ -137,6 +135,9 @@ public class BikeController : MonoBehaviour
 			if ( !exploded && _body.velocity.magnitude < 0.1f ) {
 				exploded = true;
 				Instantiate( Explode, transform.position, transform.rotation );
+				death.transform.position = transform.position;
+				//gameObject.SetActive(false);
+				sprite.gameObject.SetActive( false );
 			}
 			GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
     		GUILayout.FlexibleSpace();
