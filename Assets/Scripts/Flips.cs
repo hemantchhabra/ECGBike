@@ -10,9 +10,11 @@ public class Flips : MonoBehaviour {
 	private int _numCollisions; 
 	
 	// The quadrants we use to tell if we've had a flip
-	private bool _firstQuad, _secondQuad, _thirdQuad, _fourthQuad; 
+	private bool _firstQuad = false, _secondQuad = false, _thirdQuad = false, _fourthQuad = false; 
 	
-	public int _flips; 
+	public int _flips = 0; 
+	public int _currflips = 0;
+	public int _flipcombo = 0;
 	
 	private Collider _bodyCol; 
 	private Health _bodyHealth; 
@@ -33,6 +35,9 @@ public class Flips : MonoBehaviour {
 		_bodyHealth = GetComponentInChildren<Health>(); 
 		
 		_audioSource = GetComponent<AudioSource>();
+
+		_currflips = 0;
+		_flipcombo = 0;
 	}
 	
 	void OnCollisionEnter(Collision col) { 
@@ -66,7 +71,8 @@ public class Flips : MonoBehaviour {
 			_firstQuad = false; 
 			_secondQuad = false; 
 			_thirdQuad = false; 
-			_fourthQuad = false; 
+			_fourthQuad = false;
+			_currflips = 0;
 		}
 		
 		if (_bodyHealth.CurrentHealth <= 0) { 
@@ -86,7 +92,10 @@ public class Flips : MonoBehaviour {
 			_firstQuad = false; 
 			_secondQuad = false; 
 			_thirdQuad = false; 
-			_fourthQuad = false; 
+			_fourthQuad = false;
+			++_currflips;
+			if (_currflips > _flipcombo)
+				_flipcombo = _currflips;
 		}
 		
 	}

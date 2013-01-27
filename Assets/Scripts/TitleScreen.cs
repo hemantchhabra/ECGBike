@@ -9,7 +9,7 @@ public class TitleScreen : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-		if (GUI.Button(new Rect(Screen.width*0.5f - 48, Screen.height * 0.5f - 24, 96, 48), "Start!")) { 
+		if (GUI.Button(new Rect(Screen.width*0.5f - 48, Screen.height * 0.5f + 96, 96, 48), "Start!")) { 
 			Application.LoadLevel(1); 	
 		}
 	}

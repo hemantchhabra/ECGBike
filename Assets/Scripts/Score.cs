@@ -11,7 +11,7 @@ public class Score : MonoBehaviour {
 	}
 	
 	public tk2dSprite sprite;
-	public long CurrentScore = 0;
+	public double CurrentScore = 0;
 	public GameObject Player = null;
 	private Rigidbody _rb = null;
 	private int air_id = 0;
@@ -20,9 +20,9 @@ public class Score : MonoBehaviour {
 	BoxCollider body = null;
 	TrickMode trick = TrickMode.None;
 	bool bodyisgrounded = false;
-	int airtime = 0;
-	int wheelietime = 0;
-	int scoretime = 0;
+	float airtime = 0;
+	float wheelietime = 0;
+	float scoretime = 0;
 	
 	private AudioSource _audioSource; 
 	
@@ -39,6 +39,7 @@ public class Score : MonoBehaviour {
 		trick = TrickMode.None;
 		airtime = 0;
 		wheelietime = 0;
+		scoretime = 0;
 	}
 	
 	// Use this for initialization
@@ -59,19 +60,27 @@ public class Score : MonoBehaviour {
 			return;
 		
 		long scoreboost = 0;
+		Reset ();
+	}
+	
+	// Update is called once per frame
+	void FixedUpdate () {
+		if (_playerHealth.CurrentHealth <= 0) 
+			return;
+		float scoreboost = 0;
 		if (left != null && right != null) {
 			bool leftgrounded = left.isGrounded;
 			bool rightgrounded = right.isGrounded;
 			trick = !rightgrounded ? (trick | TrickMode.FrontWheelUp) : (trick & ~TrickMode.FrontWheelUp);
 			trick = !leftgrounded ? (trick | TrickMode.BackWheelUp) : (trick & ~TrickMode.BackWheelUp);
 			if ( trick == TrickMode.AllWheelsUp ) {
-				airtime++;
-				if ( airtime > 10 ) {
+				airtime += Time.fixedDeltaTime;
+				if ( airtime > 1 ) {
 					scoreboost += airtime;
 				}
 				//RaycastHit hit = new RaycastHit();
 				//Physics.Raycast(new Ray(transform.position, transform.InverseTransformDirection(new Vector3(0, -1, 0))), out hit);
-				if (airtime > 90 || sprite.spriteId == air_id) {
+				if (airtime > 4 || sprite.spriteId == air_id) {
 					sprite.spriteId = air_id;
 				} 
 				//sprite.spriteId = air_id;
@@ -84,9 +93,12 @@ public class Score : MonoBehaviour {
 				}
 			}
 			else {
-				++wheelietime;
-				if (wheelietime > 10) {
+				wheelietime = Time.fixedDeltaTime;
+				if (wheelietime > 1) {
 					scoreboost += wheelietime / 3;
+				}
+				if (sprite.spriteId == air_id) {
+					sprite.spriteId = ground_id;
 				}
 			}
 		}
@@ -101,7 +113,7 @@ public class Score : MonoBehaviour {
 			airtime = 0;
 			wheelietime = 0;
 			scoreboost = 0;
-			//sprite.spriteId = ground_id;
+			sprite.spriteId = ground_id;
 		}
 		else if (Player.rigidbody.velocity.magnitude < 5) {
 			airtime = 0;
@@ -109,7 +121,7 @@ public class Score : MonoBehaviour {
 			scoreboost = 0;	
 			//sprite.spriteId = ground_id;
 		}
-		scoretime += scoreboost != 0 ? 1 : 0;
+		scoretime += scoreboost != 0 ? Time.fixedDeltaTime : 0;
 		CurrentScore += scoreboost;
 	}
 	
